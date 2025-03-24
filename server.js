@@ -11,17 +11,17 @@ app.use(express.json()); // Parse JSON request bodies
 // **🔹 Database Connection (Aiven MySQL)**
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT, // Ensure port is included
+  port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  ssl: { rejectUnauthorized: true }, // Secure connection for Aiven
+  ssl: { rejectUnauthorized: false }, // ✅ Fix SSL issue
 });
 
 db.connect((err) => {
   if (err) {
     console.error("❌ Database connection failed:", err);
-    process.exit(1); // Exit the app if DB connection fails
+    process.exit(1); // Stop the app if DB connection fails
   } else {
     console.log("✅ Connected to Aiven MySQL Database");
   }
