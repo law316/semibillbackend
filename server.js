@@ -8,6 +8,9 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Parse JSON request bodies
 
+// **🔹 Use Render's Assigned Port**
+const PORT = process.env.PORT || 10000; // ✅ Render assigns PORT dynamically
+
 // **🔹 Database Connection (Aiven MySQL)**
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -156,8 +159,12 @@ app.post("/withdraw", (req, res) => {
   });
 });
 
-// **🔹 Start Server**
-const PORT = process.env.PORT || 3000;
+// **🔹 Root Route to Confirm Server is Running**
+app.get("/", (req, res) => {
+  res.send("🚀 Server is running on Render!");
+});
+
+// **🔹 Start Server (Correct Port for Render)**
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
