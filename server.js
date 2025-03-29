@@ -90,22 +90,29 @@ app.post("/saveFinancialData", async (req, res) => {
   });
 });
 
-// **🔹 Get User Financial Data**
+// 🔹 Get User Financial Data
 app.get("/getFinancialData", (req, res) => {
   const { email } = req.query;
+
+  console.log("📩 Incoming request for email:", email); // ✅ Debug log
 
   if (!email) {
     return res.status(400).json({ status: "error", message: "Email is required" });
   }
 
-  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+  // ✅ Case-insensitive email match using LOWER()
+  db.query("SELECT * FROM users WHERE LOWER(email) = LOWER(?)", [email], (err, result) => {
     if (err) {
       console.error("❌ Database error:", err);
       return res.status(500).json({ status: "error", message: "Database error" });
     }
+
     if (result.length === 0) {
+      console.log("❌ No user found for:", email); // ✅ More helpful log
       return res.status(404).json({ status: "error", message: "User not found" });
     }
+
+    console.log("✅ User found:", result[0]); // ✅ Confirm match
     res.json(result[0]);
   });
 });
